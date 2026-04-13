@@ -218,10 +218,8 @@ def recommend_entry():
         
         print(f"Parsed AI Response: Insights: {insights}, Recommendations: {recommendations}")
         
-        # 5. Prepare and store the structured data
         safe_get = lambda lst, index: lst[index] if len(lst) > index else None
         
-        # Ensure we have enough columns for the 8 fields in AIResponses
         insert_values = [
             most_recent_entry_id,
             safe_get(insights, 0), safe_get(insights, 1), safe_get(insights, 2),
@@ -250,7 +248,6 @@ def recommend_entry():
     except sqlite3.Error as e:
         return jsonify({"success": False, "error": str(e)}), 500
     except Exception as e:
-        # Catch and print the full error for better debugging
         print(f"Error during AI generation or database operation: {e}")
         return jsonify({"success": False, "error": f"AI generation or database operation failed: {str(e)}"}), 500
     finally:
@@ -258,7 +255,5 @@ def recommend_entry():
             conn.close()
 
 if __name__ == '__main__':
-    # Initialize the database on startup (calling the function from createTables.py)
     init_db() 
-    # Start the Flask app
     app.run(host='0.0.0.0', port=5100, debug=True)
